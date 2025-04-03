@@ -1,0 +1,5 @@
+$ int !myNum 50 ;
+$ flt !mySecNum 30.5 ;
+$ bol !myBool fls ;
+
+> _cprint !myNum ;
