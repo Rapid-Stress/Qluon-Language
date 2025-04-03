@@ -10,6 +10,10 @@ public:
 
 public:
 	void Run();
+	void ExecuteToken(const Token& token, size_t& tokenIndex);
+	
+	void HandleVariableDefine(const Token& token, size_t& tokenIndex);
+	void HandleSystemCall(const Token& token, size_t& tokenIndex);
 
 private:
 	Bytefile byteFile;

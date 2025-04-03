@@ -18,7 +18,7 @@ namespace Parser
 
 		while (true)
 		{
-			size_t newLinePos = fileString.find_first_of("\n\r");
+			size_t newLinePos = fileString.find_first_of("\n\r\t");
 			if (newLinePos == std::string::npos)
 				break;
 
