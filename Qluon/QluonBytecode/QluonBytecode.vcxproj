@@ -152,9 +152,13 @@
   <ItemGroup>
     <ClInclude Include="Src\Bytefile\Bytefile.h" />
     <ClInclude Include="Src\Core\Interpreter.h" />
+    <ClInclude Include="Src\Memory\StackMemory.h" />
     <ClInclude Include="Src\Parser\Parser.h" />
+    <ClInclude Include="Src\System\SystemCalls.h" />
+    <ClInclude Include="Src\Timer\Timer.h" />
     <ClInclude Include="Src\Token\Token.h" />
     <ClInclude Include="Src\Token\Tokenizer.h" />
+    <ClInclude Include="Src\Token\TokenUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

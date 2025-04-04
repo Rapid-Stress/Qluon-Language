@@ -18,15 +18,13 @@ public:
 		FLOAT_LITERAL,
 		BOOL_LITERAL,
 		INSTRUCTION_STARTER,
-		SYSTEM_CALL,
-		INSTRUCTION_ENDER
+		SYSTEM_CALL
 	};
 
 	enum InstructionType
 	{
 		VARIABLE_DEFINE,
 		FUNCTON_INVOKE,
-		LINE_END
 	};
 
 	enum DataType
@@ -49,19 +47,16 @@ public:
 			switch (type)
 			{
 			case TokenType::INT_LITERAL:
-				valueVariant = std::stoi(rawValue.c_str());
-				break;
 			case TokenType::FLOAT_LITERAL:
-				valueVariant = std::stof(rawValue.c_str());
+				valueVariant = std::stod(rawValue.c_str());
 				break;
 			case TokenType::BOOL_LITERAL:
-				valueVariant = (rawValue == "tru") ? true : false;
+				valueVariant = (double)((rawValue == "tru") ? true : false);
 				break;
 			case TokenType::IDENTIFIER:
 			case TokenType::SYSTEM_CALL:
 				valueVariant = rawValue.substr(1, rawValue.size() - 1);
 				break;
-			case TokenType::INSTRUCTION_ENDER:
 			case TokenType::INSTRUCTION_STARTER:
 				switch (rawValue[0])
 				{
@@ -71,13 +66,11 @@ public:
 				case '>':
 					valueVariant = InstructionType::FUNCTON_INVOKE;
 					break;
-				case ';':
-					valueVariant = InstructionType::LINE_END;
-					break;
 				}
 				break;
 				break;
 			case TokenType::DATA_TYPE:
+			{
 				if (rawValue == "int")
 					valueVariant = DataType::INT;
 				else if (rawValue == "flt")
@@ -85,6 +78,7 @@ public:
 				else if (rawValue == "bol")
 					valueVariant = DataType::BOOL;
 				break;
+			}
 			case TokenType::OPERATOR:
 				valueVariant = rawValue;
 				break;
@@ -98,8 +92,14 @@ public:
 			return std::get<T>(valueVariant);
 		}
 
+		template<class T>
+		inline T AsPrimitive() const
+		{
+			return (T)std::get<double>(valueVariant);
+		}
+
 	private:
-		std::variant<int, float, bool, std::string, InstructionType, DataType> valueVariant;
+		std::variant<double, std::string, InstructionType, DataType> valueVariant;
 	};
 
 public:
@@ -139,57 +139,3 @@ private:
 	Token* prev;
 	Token* next;
 };
-
-namespace TokenUtils
-{
-	typedef std::vector<Token> TokenList;
-
-	inline std::unordered_map<std::string, Token::TokenType> tokenTypeMap
-	{
-		{"$", Token::TokenType::INSTRUCTION_STARTER},
-		{">", Token::TokenType::INSTRUCTION_STARTER},
-		{"int", Token::TokenType::DATA_TYPE},
-		{"flt", Token::TokenType::DATA_TYPE},
-		{"bol", Token::TokenType::DATA_TYPE},
-		{"fls", Token::TokenType::BOOL_LITERAL},
-		{"tru", Token::TokenType::BOOL_LITERAL},
-		{";", Token::TokenType::INSTRUCTION_ENDER},
-	};
-
-	inline bool IsInt(const std::string& s)
-	{
-		return !s.empty() && std::find_if(s.begin(),
-			s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
-	}
-
-	inline bool IsFloat(const std::string& s)
-	{
-		return !s.empty() && std::find_if(s.begin(),
-			s.end(), [](unsigned char c) { return !(std::isdigit(c) || c == '.'); }) == s.end();
-	}
-
-	inline bool IsSystemCall(const std::string& s)
-	{
-		return s[0] == '_';
-	}
-
-	inline bool IsIdentifier(const std::string& s)
-	{
-		return s[0] == '!';
-	}
-
-	inline Token::TokenType GetTokenTypeFromValue(const std::string& value)
-	{
-		if (IsInt(value))
-			return Token::TokenType::INT_LITERAL;
-		else if (IsFloat(value))
-			return Token::TokenType::FLOAT_LITERAL;
-		else if (IsIdentifier(value))
-			return Token::TokenType::IDENTIFIER;
-		else if (IsSystemCall(value))
-			return Token::TokenType::SYSTEM_CALL;
-		else
-			return tokenTypeMap[value];
-	}
-
-}

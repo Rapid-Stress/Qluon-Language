@@ -2,12 +2,15 @@
 
 #include "Bytefile/Bytefile.h"
 #include "Token.h"
+#include "TokenUtils.h"
+
+const uint32_t TOKEN_BUDGET = 4096;
 
 namespace Tokenizer
 {
 	inline TokenUtils::TokenList Tokenize(const Bytefile& byteFile)
 	{
-		TokenUtils::TokenList tokenList;
+		TokenUtils::TokenList tokenList(TOKEN_BUDGET);
 
 		size_t lastIndex = 1;
 
@@ -24,7 +27,8 @@ namespace Tokenizer
 					std::exit(1);
 				}
 
-				Token& newToken = tokenList.emplace_back(tokenValue, tokenType);
+				tokenList[tokenIndex] = Token(tokenValue, tokenType);
+				Token& newToken = tokenList[tokenIndex];
 				Token* lastToken = (tokenIndex != 0) ? &tokenList[tokenIndex - 1] : nullptr;
 
 				if (lastToken) lastToken->SetNext(&newToken);

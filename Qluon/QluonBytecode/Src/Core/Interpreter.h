@@ -2,6 +2,8 @@
 
 #include "Parser/Parser.h"
 #include "Token/Tokenizer.h"
+#include "Token/TokenUtils.h"
+#include "Memory/StackMemory.h"
 
 class Interpreter
 {

@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 namespace Parser
 {
@@ -44,6 +45,9 @@ namespace Parser
 
 		if (fileString[0] != ' ')
 			fileString.insert(0, " ");
+
+		if (fileString[fileString.size() - 1] != ' ')
+			fileString.append(" ");
 
 		Bytefile byteFile(fileString);
 
