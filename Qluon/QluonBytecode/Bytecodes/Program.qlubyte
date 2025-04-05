@@ -1,4 +1,4 @@
-$ int !hello 420
+$ int !num 420
+> _cprint !num
 
-> _cprint 69.69
-> _cprint !hello
+> _jump 2

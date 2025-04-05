@@ -108,7 +108,7 @@ private:
 	{
 		if (stackPtr + sizeof(T) > capacity)
 		{
-			std::cout << "Stack Overflow. Stack size exceeding limit: [" << capacity << "bytes]" << std::endl;
+			std::cout << "Stack Overflow, stack size exceeding limit: [" << capacity << "bytes]." << std::endl;
 			std::exit(1);
 		}
 

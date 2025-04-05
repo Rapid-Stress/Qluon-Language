@@ -25,6 +25,7 @@ public:
 	{
 		VARIABLE_DEFINE,
 		FUNCTON_INVOKE,
+		LABEL
 	};
 
 	enum DataType
@@ -65,6 +66,9 @@ public:
 					break;
 				case '>':
 					valueVariant = InstructionType::FUNCTON_INVOKE;
+					break;
+				case '#':
+					valueVariant = InstructionType::LABEL;
 					break;
 				}
 				break;

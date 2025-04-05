@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Parser/Parser.h"
+#include "Loader/Parser.h"
 #include "Token/Tokenizer.h"
 #include "Token/TokenUtils.h"
 #include "Memory/StackMemory.h"
@@ -12,10 +12,10 @@ public:
 
 public:
 	void Run();
-	void ExecuteToken(const Token& token, size_t& tokenIndex);
+	void ExecuteToken(const Token& token);
 	
-	void HandleVariableDefine(const Token& token, size_t& tokenIndex);
-	void HandleSystemCall(const Token& token, size_t& tokenIndex);
+	void HandleVariableDefine(const Token& token);
+	void HandleSystemCall(const Token& token);
 
 private:
 	Bytefile byteFile;

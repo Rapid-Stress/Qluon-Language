@@ -23,7 +23,7 @@ namespace Tokenizer
 
 				if (tokenType == Token::TokenType::UNIDENTIFIED)
 				{
-					std::cout << "Illegal token <" << tokenValue << "> at [" << i << "]" << std::endl;
+					std::cout << "Illegal token <" << tokenValue << "> at [" << i << "]." << std::endl;
 					std::exit(1);
 				}
 

@@ -26,7 +26,7 @@
     <None Include="Bytecodes\Program.qlubyte" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Parser\Parser.h">
+    <ClInclude Include="Src\Loader\Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Bytefile\Bytefile.h">
@@ -51,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Timer\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Loader\PreProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

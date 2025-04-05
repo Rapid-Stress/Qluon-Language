@@ -1,5 +1,7 @@
 #include "Interpreter.h"
 #include "System/SystemCalls.h"
+#include "Loader/PreProcessor.h"
+#include "Timer/Timer.h"
 
 #include <iostream>
 
@@ -8,38 +10,44 @@ Interpreter::Interpreter(const std::string& filePath)
 {
 	byteFile = Parser::Parse(filePath);
 	tokenList = Tokenizer::Tokenize(byteFile);
+	PreProcessor::PreProcess(tokenList);
 }
 
 void Interpreter::Run()
 {
-	for (size_t tokenIndex = 0; tokenIndex < tokenList.Size(); tokenIndex++)
+	while (Timer::Get().GetProgramCounter() < tokenList.Size())
 	{
-		const Token& token = tokenList[tokenIndex];
-		ExecuteToken(token, tokenIndex);
+		const Token& token = tokenList[Timer::Get().GetProgramCounter()];
+
+		ExecuteToken(token);
 	}
 }
 
-void Interpreter::ExecuteToken(const Token& token, size_t& tokenIndex)
+void Interpreter::ExecuteToken(const Token& token)
 {
 	switch (token.GetType())
 	{
 	case Token::TokenType::INSTRUCTION_STARTER:
+	{
 		Token::InstructionType starterType = token.GetValue().As<Token::InstructionType>();
 
 		switch (starterType)
 		{
 		case Token::InstructionType::VARIABLE_DEFINE:
-			HandleVariableDefine(token, tokenIndex);
+			HandleVariableDefine(token);
 			break;
 		case Token::InstructionType::FUNCTON_INVOKE:
-			HandleSystemCall(token, tokenIndex);
+			HandleSystemCall(token);
 			break;
 		}
 		break;
 	}
+	default:
+		break;
+	}
 }
 
-void Interpreter::HandleVariableDefine(const Token& token, size_t& tokenIndex)
+void Interpreter::HandleVariableDefine(const Token& token)
 {
 	const Token* dataTypeToken = token.GetNext();
 	Token::DataType dataType = dataTypeToken->GetValue().As<Token::DataType>();
@@ -79,15 +87,12 @@ void Interpreter::HandleVariableDefine(const Token& token, size_t& tokenIndex)
 		StackMemory::Instance().Allocate(identifier, value);
 	}
 		break;
-	default:
-		break;
 	}
+
+	Timer::Get().IncrementProgramCounter(4);
 }
 
-void Interpreter::HandleSystemCall(const Token& token, size_t& tokenIndex)
+void Interpreter::HandleSystemCall(const Token& token)
 {
-	const Token* functionLabelToken = token.GetNext();
-	std::string functionLabel = functionLabelToken->GetValue().As<std::string>();
-
-	SystemCalls::systemCallsMap[functionLabel](*functionLabelToken);
+	SystemCalls::Call(token);
 }
